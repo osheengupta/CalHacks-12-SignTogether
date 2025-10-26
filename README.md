@@ -12,8 +12,7 @@ SignTogether is an inclusive video-meeting platform that uses computer vision an
 - **📝 Live Speech-to-Text** - Deepgram's Nova-2 model provides accurate real-time captions
 - **👋 Gesture Recognition** - Gemini Vision detects sign language and common gestures
 - **🤖 Smart Summaries** - Claude 3.5 Sonnet generates meeting summaries and action items
-- **📊 Analytics Dashboard** - Arize AI monitors model performance and accuracy
-- **🔗 API-First Design** - Comprehensive REST API documented with Postman + Mintlify
+- **🔗 API-First Design** - Comprehensive REST API for easy integration
 
 ## 🚀 Quick Start
 
@@ -85,16 +84,6 @@ GOOGLE_API_KEY=your_google_api_key
 ANTHROPIC_API_KEY=your_anthropic_api_key
 ```
 
-### Optional Integrations
-
-```env
-# Analytics & Monitoring
-ARIZE_API_KEY=your_arize_api_key
-COMET_API_KEY=your_comet_api_key
-
-# Payments (for donations/funding)
-VISA_API_KEY=your_visa_api_key
-```
 
 ## 📱 Usage
 
@@ -174,16 +163,15 @@ SignTogether/
 
 Full API documentation available at `/docs`
 
-## 🤝 Sponsor Technologies
+## 🤝 Technologies Used
 
 - **[LiveKit](https://livekit.io/)** - Real-time video infrastructure
-- **[Deepgram](https://deepgram.com/)** - Advanced speech recognition
+- **[Deepgram](https://deepgram.com/)** - Advanced speech recognition (Nova-2 model)
 - **[Google Gemini](https://ai.google.dev/)** - Computer vision for gesture detection
-- **[Anthropic Claude](https://www.anthropic.com/)** - Natural language processing
-- **[Arize AI](https://arize.com/)** - ML model monitoring and analytics
-- **[Postman](https://www.postman.com/)** - API development and testing
-- **[Mintlify](https://mintlify.com/)** - Beautiful API documentation
-- **[Visa](https://developer.visa.com/)** - Payment processing for donations
+- **[Anthropic Claude](https://www.anthropic.com/)** - Natural language processing for summaries
+- **[Next.js 14](https://nextjs.org/)** - React framework with App Router
+- **[Prisma](https://www.prisma.io/)** - Database ORM
+- **[TailwindCSS](https://tailwindcss.com/)** - Styling
 
 ## 🧪 Testing
 
