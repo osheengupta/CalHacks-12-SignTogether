@@ -1,0 +1,138 @@
+{
+  "meeting": {
+    "id": "demo_meeting_001",
+    "roomName": "accessibility-demo",
+    "title": "Accessibility in Tech: Building Inclusive Products",
+    "description": "A demo meeting showcasing SignTogether's accessibility features",
+    "startTime": "2024-01-15T10:00:00Z",
+    "participants": [
+      {
+        "name": "Sarah Chen",
+        "role": "Product Manager",
+        "isDeaf": false
+      },
+      {
+        "name": "Alex Rivera",
+        "role": "UX Designer", 
+        "isDeaf": true
+      },
+      {
+        "name": "Jordan Kim",
+        "role": "Software Engineer",
+        "isDeaf": false
+      },
+      {
+        "name": "Taylor Johnson",
+        "role": "Accessibility Consultant",
+        "isDeaf": true
+      }
+    ]
+  },
+  "transcripts": [
+    {
+      "timestamp": "10:00:15",
+      "speaker": "Sarah Chen",
+      "text": "Good morning everyone! Welcome to our accessibility workshop. Today we'll be discussing how to build more inclusive products.",
+      "confidence": 0.96
+    },
+    {
+      "timestamp": "10:00:45",
+      "speaker": "Alex Rivera", 
+      "text": "Thanks Sarah. I'm excited to share some insights from the deaf community perspective on product design.",
+      "confidence": 0.94
+    },
+    {
+      "timestamp": "10:01:12",
+      "speaker": "Jordan Kim",
+      "text": "I'd love to hear about technical implementations. What are the biggest challenges we face when building accessible features?",
+      "confidence": 0.97
+    },
+    {
+      "timestamp": "10:01:35",
+      "speaker": "Taylor Johnson",
+      "text": "Great question Jordan. One major challenge is ensuring our solutions work across different assistive technologies.",
+      "confidence": 0.95
+    },
+    {
+      "timestamp": "10:02:00",
+      "speaker": "Sarah Chen",
+      "text": "Let's start with captions. Alex, can you tell us about your experience with live captioning in meetings?",
+      "confidence": 0.98
+    },
+    {
+      "timestamp": "10:02:20",
+      "speaker": "Alex Rivera",
+      "text": "Absolutely. Real-time captions are crucial for participation. The accuracy and speed make a huge difference in following conversations.",
+      "confidence": 0.93
+    },
+    {
+      "timestamp": "10:02:45",
+      "speaker": "Jordan Kim",
+      "text": "What about gesture recognition? How important is it to detect sign language in video calls?",
+      "confidence": 0.96
+    },
+    {
+      "timestamp": "10:03:10",
+      "speaker": "Taylor Johnson",
+      "text": "It's revolutionary. When the system can identify who's signing, it helps hearing participants know who's speaking.",
+      "confidence": 0.94
+    },
+    {
+      "timestamp": "10:03:35",
+      "speaker": "Alex Rivera",
+      "text": "Exactly. And detecting common gestures like 'yes' or 'no' can speed up communication significantly.",
+      "confidence": 0.95
+    },
+    {
+      "timestamp": "10:04:00",
+      "speaker": "Sarah Chen",
+      "text": "That's fascinating. How do we ensure these AI systems are trained on diverse sign languages and dialects?",
+      "confidence": 0.97
+    }
+  ],
+  "gestures": [
+    {
+      "timestamp": "10:02:25",
+      "user": "Alex Rivera",
+      "gestureType": "signing_detected",
+      "confidence": 0.89,
+      "description": "Active signing detected during speech"
+    },
+    {
+      "timestamp": "10:03:15",
+      "user": "Taylor Johnson", 
+      "gestureType": "yes",
+      "confidence": 0.92,
+      "description": "Nodding gesture indicating agreement"
+    },
+    {
+      "timestamp": "10:03:40",
+      "user": "Alex Rivera",
+      "gestureType": "thank_you",
+      "confidence": 0.87,
+      "description": "Thank you gesture in response to comment"
+    },
+    {
+      "timestamp": "10:04:05",
+      "user": "Jordan Kim",
+      "gestureType": "hello",
+      "confidence": 0.91,
+      "description": "Waving gesture during introduction"
+    }
+  ],
+  "summary": {
+    "meeting_summary": "This accessibility workshop focused on building inclusive products for deaf and hearing users. Key discussion points included the importance of real-time captions, gesture recognition technology, and ensuring AI systems work with diverse sign languages. Participants shared insights on technical implementation challenges and the impact of accessibility features on user participation.",
+    "action_items": [
+      "Research diverse sign language datasets for AI training",
+      "Implement real-time caption accuracy improvements", 
+      "Test gesture recognition across different cultural contexts",
+      "Create accessibility guidelines for development teams"
+    ],
+    "key_points": [
+      "Real-time captions are crucial for deaf participation in meetings",
+      "Gesture recognition helps identify active speakers in sign language",
+      "AI systems need training on diverse sign languages and dialects",
+      "Accessibility features benefit all users, not just those with disabilities"
+    ]
+  }
+}

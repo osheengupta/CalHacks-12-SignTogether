@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Meeting {
+  id          String   @id @default(cuid())
+  roomName    String   @unique
+  title       String?
+  description String?
+  startTime   DateTime @default(now())
+  endTime     DateTime?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  participants Participant[]
+  transcripts  Transcript[]
+  gestures     Gesture[]
+  summaries    Summary[]
+
+  @@map("meetings")
+}
+
+model Participant {
+  id        String   @id @default(cuid())
+  name      String
+  meetingId String
+  joinTime  DateTime @default(now())
+  leaveTime DateTime?
+  isActive  Boolean  @default(true)
+  role      String   @default("participant") // participant, moderator
+  
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@map("participants")
+}
+
+model Transcript {
+  id          String   @id @default(cuid())
+  meetingId   String
+  speakerId   String?
+  speakerName String?
+  text        String
+  confidence  Float?
+  timestamp   DateTime @default(now())
+  language    String   @default("en")
+  isProcessed Boolean  @default(false)
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@map("transcripts")
+}
+
+model Gesture {
+  id          String   @id @default(cuid())
+  meetingId   String
+  userId      String?
+  userName    String?
+  gestureType String   // "yes", "no", "thank_you", "hello", "goodbye", "signing_detected"
+  confidence  Float?
+  timestamp   DateTime @default(now())
+  metadata    String?  // JSON string for additional data
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@map("gestures")
+}
+
+model Summary {
+  id          String   @id @default(cuid())
+  meetingId   String
+  content     String
+  summaryType String   @default("meeting") // meeting, action_items, key_points
+  generatedAt DateTime @default(now())
+  language    String   @default("en")
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+
+  @@map("summaries")
+}
+
+model Analytics {
+  id               String   @id @default(cuid())
+  meetingId        String?
+  eventType        String   // caption_accuracy, gesture_confidence, latency, etc.
+  value            Float
+  metadata         String?  // JSON string for additional metrics
+  timestamp        DateTime @default(now())
+
+  @@map("analytics")
+}

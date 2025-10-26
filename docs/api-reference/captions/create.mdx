@@ -1,0 +1,159 @@
+# Create Caption
+
+Process audio data and generate live captions using Deepgram's speech-to-text API.
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.signtogether.com/api/captions" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "meetingId": "meeting_123",
+    "audioData": "base64_encoded_audio_data",
+    "speakerId": "user_456",
+    "speakerName": "John Doe"
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('/api/captions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    meetingId: 'meeting_123',
+    audioData: 'base64_encoded_audio_data',
+    speakerId: 'user_456',
+    speakerName: 'John Doe'
+  })
+});
+
+const result = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.signtogether.com/api/captions',
+    json={
+        'meetingId': 'meeting_123',
+        'audioData': 'base64_encoded_audio_data',
+        'speakerId': 'user_456',
+        'speakerName': 'John Doe'
+    }
+)
+
+result = response.json()
+```
+
+</RequestExample>
+
+## Request Body
+
+<ParamField body="meetingId" type="string" required>
+  The unique identifier for the meeting
+</ParamField>
+
+<ParamField body="audioData" type="string" required>
+  Base64 encoded audio data (WebM format recommended)
+</ParamField>
+
+<ParamField body="speakerId" type="string">
+  Unique identifier for the speaker
+</ParamField>
+
+<ParamField body="speakerName" type="string">
+  Display name of the speaker
+</ParamField>
+
+## Response
+
+<ResponseField name="transcript" type="object">
+  The saved transcript object
+  
+  <Expandable title="transcript">
+    <ResponseField name="id" type="string">
+      Unique identifier for the transcript
+    </ResponseField>
+    
+    <ResponseField name="meetingId" type="string">
+      The meeting this transcript belongs to
+    </ResponseField>
+    
+    <ResponseField name="speakerId" type="string">
+      ID of the speaker
+    </ResponseField>
+    
+    <ResponseField name="speakerName" type="string">
+      Name of the speaker
+    </ResponseField>
+    
+    <ResponseField name="text" type="string">
+      The transcribed text
+    </ResponseField>
+    
+    <ResponseField name="confidence" type="number">
+      Confidence score from 0 to 1
+    </ResponseField>
+    
+    <ResponseField name="timestamp" type="string">
+      ISO timestamp when the transcript was created
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="text" type="string">
+  The transcribed text content
+</ResponseField>
+
+<ResponseField name="confidence" type="number">
+  Confidence score from Deepgram (0 to 1)
+</ResponseField>
+
+<ResponseExample>
+
+```json Response
+{
+  "transcript": {
+    "id": "transcript_789",
+    "meetingId": "meeting_123",
+    "speakerId": "user_456",
+    "speakerName": "John Doe",
+    "text": "Hello everyone, welcome to today's meeting.",
+    "confidence": 0.95,
+    "timestamp": "2024-01-15T10:30:00Z"
+  },
+  "text": "Hello everyone, welcome to today's meeting.",
+  "confidence": 0.95
+}
+```
+
+</ResponseExample>
+
+## Features
+
+- **High Accuracy**: Uses Deepgram's Nova-2 model for superior transcription quality
+- **Real-time Processing**: Low latency transcription suitable for live meetings
+- **Speaker Identification**: Associates transcripts with specific speakers
+- **Confidence Scoring**: Provides reliability metrics for each transcription
+- **Smart Formatting**: Automatic punctuation and capitalization
+
+## Error Responses
+
+<ResponseExample>
+
+```json 400 Bad Request
+{
+  "error": "Meeting ID and audio data are required"
+}
+```
+
+```json 500 Internal Server Error
+{
+  "error": "Deepgram API key not configured"
+}
+```
+
+</ResponseExample>

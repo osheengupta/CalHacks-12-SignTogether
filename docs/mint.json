@@ -1,0 +1,112 @@
+{
+  "name": "SignTogether API",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#2563eb",
+    "light": "#60a5fa",
+    "dark": "#1d4ed8"
+  },
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:support@signtogether.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://dashboard.signtogether.com"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Documentation",
+      "icon": "book-open-cover",
+      "url": "https://docs.signtogether.com"
+    },
+    {
+      "name": "Community",
+      "icon": "slack",
+      "url": "https://community.signtogether.com"
+    },
+    {
+      "name": "Blog",
+      "icon": "newspaper",
+      "url": "https://blog.signtogether.com"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "development"
+      ]
+    },
+    {
+      "group": "Essentials",
+      "pages": [
+        "essentials/meetings",
+        "essentials/captions",
+        "essentials/gestures",
+        "essentials/summaries"
+      ]
+    },
+    {
+      "group": "API Documentation",
+      "pages": [
+        "api-reference/introduction",
+        "api-reference/authentication"
+      ]
+    },
+    {
+      "group": "Meetings",
+      "pages": [
+        "api-reference/meetings/create",
+        "api-reference/meetings/get",
+        "api-reference/meetings/update"
+      ]
+    },
+    {
+      "group": "LiveKit",
+      "pages": [
+        "api-reference/livekit/token"
+      ]
+    },
+    {
+      "group": "Captions",
+      "pages": [
+        "api-reference/captions/create",
+        "api-reference/captions/get"
+      ]
+    },
+    {
+      "group": "Gestures",
+      "pages": [
+        "api-reference/gestures/detect",
+        "api-reference/gestures/get"
+      ]
+    },
+    {
+      "group": "Summaries",
+      "pages": [
+        "api-reference/summaries/generate",
+        "api-reference/summaries/get"
+      ]
+    }
+  ],
+  "footerSocials": {
+    "x": "https://x.com/signtogether",
+    "github": "https://github.com/signtogether",
+    "linkedin": "https://www.linkedin.com/company/signtogether"
+  }
+}

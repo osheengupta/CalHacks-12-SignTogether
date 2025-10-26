@@ -1,0 +1,249 @@
+'use client'
+
+import { useEffect, useState, useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Mic, MicOff, Camera, CameraOff, PhoneOff, MessageSquare, Users, Settings } from 'lucide-react'
+
+export default function MeetingPage() {
+  const searchParams = useSearchParams()
+  const [token, setToken] = useState<string>('')
+  const [wsUrl, setWsUrl] = useState<string>('')
+  const [meetingId, setMeetingId] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string>('')
+  const [showCaptions, setShowCaptions] = useState(true)
+  const [showSummary, setShowSummary] = useState(false)
+  const [isAudioEnabled, setIsAudioEnabled] = useState(true)
+  const [isVideoEnabled, setIsVideoEnabled] = useState(true)
+  const [isConnected, setIsConnected] = useState(false)
+
+  const roomName = searchParams.get('room') || ''
+  const participantName = searchParams.get('name') || ''
+  const audioEnabled = searchParams.get('audio') === 'true'
+  const videoEnabled = searchParams.get('video') === 'true'
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    if (!roomName || !participantName) {
+      setError('Missing room name or participant name')
+      setIsLoading(false)
+      return
+    }
+
+    const initializeMeeting = async () => {
+      try {
+        // Create or get meeting
+        const meetingResponse = await fetch('/api/meetings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            roomName,
+            title: `Meeting: ${roomName}`,
+          }),
+        })
+
+        if (!meetingResponse.ok) {
+          throw new Error('Failed to create meeting')
+        }
+
+        const { meeting } = await meetingResponse.json()
+        setMeetingId(meeting.id)
+
+        // Get LiveKit token
+        const tokenResponse = await fetch('/api/livekit/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            roomName,
+            participantName,
+          }),
+        })
+
+        if (!tokenResponse.ok) {
+          throw new Error('Failed to get access token')
+        }
+
+        const { token: accessToken, wsUrl: serverUrl } = await tokenResponse.json()
+        setToken(accessToken)
+        setWsUrl(serverUrl)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to initialize meeting')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    initializeMeeting()
+  }, [roomName, participantName])
+
+  const handleDisconnect = () => {
+    if (room) {
+      room.disconnect()
+    }
+    window.location.href = '/'
+  }
+
+  const onRoomConnected = () => {
+    console.log('Connected to room')
+  }
+
+  const onRoomDisconnected = () => {
+    setRoom(null)
+    console.log('Disconnected from room')
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-white">Joining meeting...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-400 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.href = '/'}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  if (!token || !wsUrl) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <p className="text-white">Initializing...</p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white">
+      <LiveKitRoom
+        video={videoEnabled}
+        audio={audioEnabled}
+        token={token}
+        serverUrl={wsUrl}
+        data-lk-theme="default"
+        style={{ height: '100vh' }}
+        onConnected={onRoomConnected}
+        onDisconnected={onRoomDisconnected}
+      >
+        <div className="flex h-screen">
+          {/* Main Video Area */}
+          <div className="flex-1 relative">
+            <VideoConference />
+            <RoomAudioRenderer />
+            
+            {/* Gesture Detection Overlay */}
+            {/* {room && meetingId && (
+              <GestureDetector 
+                room={room} 
+                meetingId={meetingId}
+                participantName={participantName}
+              />
+            )} */}
+
+            {/* Meeting Controls */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+              <div className="flex items-center space-x-4 bg-black bg-opacity-50 rounded-full px-6 py-3">
+                <button
+                  onClick={() => setShowCaptions(!showCaptions)}
+                  className={`p-3 rounded-full ${
+                    showCaptions 
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                  } transition-colors`}
+                  aria-label="Toggle captions"
+                >
+                  <MessageSquare className="h-5 w-5" />
+                </button>
+                
+                <button
+                  onClick={() => setShowSummary(!showSummary)}
+                  className={`p-3 rounded-full ${
+                    showSummary 
+                      ? 'bg-green-600 text-white' 
+                      : 'bg-gray-600 text-gray-300 hover:bg-gray-500'
+                  } transition-colors`}
+                  aria-label="Toggle summary"
+                >
+                  <Users className="h-5 w-5" />
+                </button>
+
+                <button
+                  onClick={handleDisconnect}
+                  className="p-3 rounded-full bg-red-600 text-white hover:bg-red-700 transition-colors"
+                  aria-label="Leave meeting"
+                >
+                  <PhoneOff className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Side Panel */}
+          {(showCaptions || showSummary) && (
+            <div className="w-80 bg-gray-800 border-l border-gray-700 flex flex-col">
+              {/* Panel Tabs */}
+              <div className="flex border-b border-gray-700">
+                <button
+                  onClick={() => {
+                    setShowCaptions(true)
+                    setShowSummary(false)
+                  }}
+                  className={`flex-1 px-4 py-3 text-sm font-medium ${
+                    showCaptions && !showSummary
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                  }`}
+                >
+                  Live Captions
+                </button>
+                <button
+                  onClick={() => {
+                    setShowSummary(true)
+                    setShowCaptions(false)
+                  }}
+                  className={`flex-1 px-4 py-3 text-sm font-medium ${
+                    showSummary && !showCaptions
+                      ? 'bg-green-600 text-white'
+                      : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                  }`}
+                >
+                  Summary
+                </button>
+              </div>
+
+              {/* Panel Content */}
+              <div className="flex-1 overflow-hidden">
+                {showCaptions && !showSummary && meetingId && (
+                  <div className="p-4 text-white">
+                    <h3 className="text-lg font-semibold mb-4">Live Captions</h3>
+                    <p className="text-gray-300">Captions will appear here when implemented.</p>
+                  </div>
+                )}
+                {showSummary && !showCaptions && meetingId && (
+                  <div className="p-4 text-white">
+                    <h3 className="text-lg font-semibold mb-4">Meeting Summary</h3>
+                    <p className="text-gray-300">AI-generated summary will appear here when implemented.</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </LiveKitRoom>
+    </div>
+  )
+}
